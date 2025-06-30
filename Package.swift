@@ -25,6 +25,11 @@ let package = Package(
                 .linkedFramework("CoreImage"),
                 .linkedFramework("SwiftData")
             ]
+        ),
+        .testTarget(
+            name: "ImageDeskewTests",
+            dependencies: ["ImageDeskew"],
+            path: "ImageDeskewTests"
         )
     ]
 )
