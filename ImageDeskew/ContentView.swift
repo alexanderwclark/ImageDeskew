@@ -502,8 +502,7 @@ final class CropperViewModel: ObservableObject {
     
     
     private func imageFrame(in container: CGSize) -> CGRect {
-        let base = imageSize == .zero ? CGSize(width: 1, height: 1) : imageSize
-        let fit = fittedImageSize(for: base,
+        let fit = fittedImageSize(for: imageSize,
                                   in: container)
         let shown = CGSize(width: fit.width * scale,
                            height: fit.height * scale)
