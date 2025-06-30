@@ -215,6 +215,12 @@ struct CropEngine {
         guard let cropped = cg.cropping(to: pix) else {
             return nil
         }
+#if DEBUG
+        let expectedCropWidth = Int(round(pix.width))
+        let expectedCropHeight = Int(round(pix.height))
+        assert(cropped.width == expectedCropWidth && cropped.height == expectedCropHeight,
+               "CGImage cropped size \(cropped.width)x\(cropped.height) != expected \(expectedCropWidth)x\(expectedCropHeight)")
+#endif
         
         // 3. Vision rect detect
         let handler = VNImageRequestHandler(cgImage: cropped)
@@ -271,15 +277,7 @@ struct CropEngine {
                                    scale: image.scale,
                                    orientation: .up)
 
-        // Verify dimensions match expected crop size in pixels
-        let expectedWidth = Int(round(pix.width))
-        let expectedHeight = Int(round(pix.height))
-        let actualWidth = Int(resultImage.size.width * resultImage.scale)
-        let actualHeight = Int(resultImage.size.height * resultImage.scale)
-        assert(expectedWidth == actualWidth && expectedHeight == actualHeight,
-               "Returned image size \(actualWidth)x\(actualHeight) != expected \(expectedWidth)x\(expectedHeight)")
-
-       return resultImage
+        return resultImage
     }
 }
 
