@@ -306,7 +306,7 @@ struct ContentView: View {
                 }
             }
             .padding()
-            .navigationTitle("Image Deskewer")
+            .navigationTitle("ImageDeskew")
         }
     }
     
