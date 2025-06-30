@@ -22,8 +22,7 @@ let package = Package(
                 .linkedFramework("SwiftUI"),
                 .linkedFramework("PhotosUI"),
                 .linkedFramework("Vision"),
-                .linkedFramework("CoreImage"),
-                .linkedFramework("SwiftData")
+                .linkedFramework("CoreImage")
             ]
         ),
         .testTarget(
