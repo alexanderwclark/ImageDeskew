@@ -227,8 +227,6 @@ struct CropEngine {
         try? handler.perform([req])
         let o = (req.results as? [VNRectangleObservation])?.first
             if let o = o {
-                let w = CGFloat(cropped.width)
-                let h = CGFloat(cropped.height)
                 #if DEBUG
                 print("\n Detected Vision corners (in pixels of crop):")
                 print("Top Left:     \(o.topLeft.denormalized(to: cropped))")
