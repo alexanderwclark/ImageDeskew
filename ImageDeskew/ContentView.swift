@@ -148,7 +148,9 @@ struct CropEngine {
             let cropRectClamped = cropRect.intersection(frame)
             if cropRectClamped.isNull || cropRectClamped.width < 1 || cropRectClamped.height < 1
             {
+#if DEBUG
                 print("cropRect not overlapping image frame!")
+#endif
                 return nil
             }
 
@@ -164,7 +166,9 @@ struct CropEngine {
             let nwClamped = max(0, min(nw, 1 - nxClamped))
             let nhClamped = max(0, min(nh, 1 - nyClamped))
 
+            #if DEBUG
             print("nx: \(nxClamped), ny: \(nyClamped), nw: \(nwClamped), nh: \(nhClamped)")
+            #endif
 
             guard nwClamped > 0, nhClamped > 0 else { return nil }
 
@@ -174,8 +178,10 @@ struct CropEngine {
                 width: nwClamped * CGFloat(cg.width),
                 height: nhClamped * CGFloat(cg.height)
             )
+            #if DEBUG
             print("Cropping CGImage to rect: \(pix)")
             print("Original size: \(cg.width)x\(cg.height)")
+            #endif
 
             
 //            // 2. Crop -> pixel coords
@@ -216,19 +222,23 @@ struct CropEngine {
             if let o = o {
                 let w = CGFloat(cropped.width)
                 let h = CGFloat(cropped.height)
+                #if DEBUG
                 print("\n Detected Vision corners (in pixels of crop):")
                 print("Top Left:     \(o.topLeft.denormalized(to: cropped))")
                 print("Top Right:    \(o.topRight.denormalized(to: cropped))")
                 print("Bottom Left:  \(o.bottomLeft.denormalized(to: cropped))")
                 print("Bottom Right: \(o.bottomRight.denormalized(to: cropped))")
+                #endif
             }
-            
+
+            #if DEBUG
             print("\n Found rectangle? \(o != nil), corners: \(o?.topLeft ?? .zero), \(o?.topRight ?? .zero), \(o?.bottomLeft ?? .zero), \(o?.bottomRight ?? .zero)\n")
             print("cropRect (view): \(cropRect)")
             print("frame (image in view): \(frame)")
             print("Resulting normalized crop: x:\(nx), y:\(ny), w:\(nw), h:\(nh)")
             print("Crop in image pixels: \(pix)")
             print("Original image size: \(cg.width)x\(cg.height)")
+            #endif
             
             // 4. Perspective correction
         let ci = CIImage(cgImage: cropped)
