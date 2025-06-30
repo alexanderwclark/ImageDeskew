@@ -1,0 +1,16 @@
+# macOS
+.DS_Store
+
+# Xcode build artifacts
+build/
+DerivedData/
+
+# Swift Package Manager build folder
+.build/
+
+# Xcode user data
+xcuserdata/
+
+# Swift package manager dependencies
+Packages/
+
