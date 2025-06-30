@@ -76,7 +76,7 @@ struct CropSnapshot: Equatable {
 
 
 
-// MARK: - Processing engine (unchanged from 2.3)
+// MARK: - Processing engine
 struct CropEngine {
     static func resize(rect r0: CGRect,
                        handleIndex idx: Int,
