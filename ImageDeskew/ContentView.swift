@@ -413,7 +413,7 @@ struct CropperView: View {
                 }
                 .padding()
             }
-            .onAppear { vm.imageSize = input.size; vm.containerSize = geo.size }            .
+            .onAppear { vm.imageSize = input.size; vm.containerSize = geo.size }           
             onChange(of: geo.size) { s in vm.containerSize = s }
         }
         .navigationBarTitleDisplayMode(.inline)
