@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "E38EAE39-5C2A-4784-9CDB-B7ABDCF161AA"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FD2D224C-77C8-4786-A27F-76BE063110B9"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ImageDeskew/xxx3.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "216"
+            endingLineNumber = "216"
+            landmarkName = "process(image:displaySize:scale:offset:cropRect:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "FD2D224C-77C8-4786-A27F-76BE063110B9 - 99b718a898db0ac9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static ImageDeskew.CropEngine.process(image: __C.UIImage, displaySize: __C.CGSize, scale: CoreGraphics.CGFloat, offset: __C.CGSize, cropRect: __C.CGRect) -&gt; Swift.Optional&lt;__C.UIImage&gt;"
+                  moduleName = "ImageDeskew.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alexanderwclark/Desktop/EnteroPluriProject/R/ImageDeskew/ImageDeskew/xxx3.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "216"
+                  endingLineNumber = "216">
+               </Location>
+               <Location
+                  uuid = "FD2D224C-77C8-4786-A27F-76BE063110B9 - 99b718a898db0ac9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static ImageDeskew.CropEngine.process(image: __C.UIImage, displaySize: __C.CGSize, scale: CoreGraphics.CGFloat, offset: __C.CGSize, cropRect: __C.CGRect) -&gt; Swift.Optional&lt;__C.UIImage&gt;"
+                  moduleName = "ImageDeskew.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alexanderwclark/Desktop/EnteroPluriProject/R/ImageDeskew/ImageDeskew/xxx3.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "216"
+                  endingLineNumber = "216">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
