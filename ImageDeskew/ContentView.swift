@@ -172,16 +172,23 @@ struct CropEngine {
 
             guard nwClamped > 0, nhClamped > 0 else { return nil }
 
-            let pix = CGRect(
-                x: nxClamped * CGFloat(cg.width),
-                y: nyClamped * CGFloat(cg.height),
-                width: nwClamped * CGFloat(cg.width),
-                height: nhClamped * CGFloat(cg.height)
-            )
-            #if DEBUG
-            print("Cropping CGImage to rect: \(pix)")
-            print("Original size: \(cg.width)x\(cg.height)")
-            #endif
+        var pix = CGRect(
+            x: nxClamped * CGFloat(cg.width),
+            y: nyClamped * CGFloat(cg.height),
+            width: nwClamped * CGFloat(cg.width),
+            height: nhClamped * CGFloat(cg.height)
+        ).integral
+
+        // Sanity check - ensure rounding produced valid values
+        pix.origin.x = round(pix.origin.x)
+        pix.origin.y = round(pix.origin.y)
+        pix.size.width = round(pix.size.width)
+        pix.size.height = round(pix.size.height)
+
+        #if DEBUG
+        print("Cropping CGImage to rect: \(pix)")
+        print("Original size: \(cg.width)x\(cg.height)")
+        #endif
 
             
 //            // 2. Crop -> pixel coords
@@ -220,8 +227,6 @@ struct CropEngine {
         try? handler.perform([req])
         let o = (req.results as? [VNRectangleObservation])?.first
             if let o = o {
-                let w = CGFloat(cropped.width)
-                let h = CGFloat(cropped.height)
                 #if DEBUG
                 print("\n Detected Vision corners (in pixels of crop):")
                 print("Top Left:     \(o.topLeft.denormalized(to: cropped))")
@@ -261,9 +266,20 @@ struct CropEngine {
         } else {
             outCG = cropped
         }
-       return UIImage(cgImage: outCG,
-                      scale: image.scale,
-                      orientation: .up)
+
+        let resultImage = UIImage(cgImage: outCG,
+                                   scale: image.scale,
+                                   orientation: .up)
+
+        // Verify dimensions match expected crop size in pixels
+        let expectedWidth = Int(round(pix.width))
+        let expectedHeight = Int(round(pix.height))
+        let actualWidth = Int(resultImage.size.width * resultImage.scale)
+        let actualHeight = Int(resultImage.size.height * resultImage.scale)
+        assert(expectedWidth == actualWidth && expectedHeight == actualHeight,
+               "Returned image size \(actualWidth)x\(actualHeight) != expected \(expectedWidth)x\(expectedHeight)")
+
+       return resultImage
     }
 }
 
