@@ -392,7 +392,7 @@ struct CropperView: View {
                 }
                 .padding()
             }
-            .onAppear { vm.containerSize = geo.size }
+            .onAppear { vm.imageSize = input.size; vm.containerSize = geo.size }
             .onChange(of: geo.size) { s in vm.containerSize = s }
         }
         .navigationBarTitleDisplayMode(.inline)
@@ -417,6 +417,7 @@ final class CropperViewModel: ObservableObject {
     private var history: [CropSnapshot] = []
     private var cursor = 0
 
+    var imageSize: CGSize = .zero
     // Container tracking
     var containerSize: CGSize = .zero {
         didSet {
@@ -489,9 +490,7 @@ final class CropperViewModel: ObservableObject {
     
     
     private func imageFrame(in container: CGSize) -> CGRect {
-        let fit = fittedImageSize(for: CGSize(width: 1,
-                                              height: 1),
-                                  in: container) // aspect only
+        let fit = fittedImageSize(for: imageSize, in: container)
         let shown = CGSize(width: fit.width * scale,
                            height: fit.height * scale)
         return CGRect(x: ((container.width - shown.width) / 2) + offset.width,
