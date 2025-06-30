@@ -1,4 +1,5 @@
 import XCTest
+import UIKit
 @testable import ImageDeskew
 
 final class ImageDeskewTests: XCTestCase {
@@ -41,5 +42,54 @@ final class ImageDeskewTests: XCTestCase {
                                       minSide: 40)
         XCTAssertGreaterThanOrEqual(small.width, 40 - 0.001)
         XCTAssertGreaterThanOrEqual(small.height, 40 - 0.001)
+    }
+
+    func testProcessWithoutRectangle() {
+        let size = CGSize(width: 100, height: 100)
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let base = renderer.image { ctx in
+            UIColor.red.setFill()
+            ctx.fill(CGRect(origin: .zero, size: size))
+        }
+
+        let oriented = UIImage(cgImage: base.cgImage!, scale: base.scale, orientation: .right)
+        let crop = CGRect(x: 10, y: 20, width: 30, height: 40)
+
+        let out = CropEngine.process(image: oriented,
+                                     displaySize: size,
+                                     scale: 1,
+                                     offset: .zero,
+                                     cropRect: crop)
+
+        XCTAssertNotNil(out)
+        XCTAssertEqual(out?.size.width, crop.width, accuracy: 0.5)
+        XCTAssertEqual(out?.size.height, crop.height, accuracy: 0.5)
+        XCTAssertEqual(out?.imageOrientation, .up)
+    }
+
+    func testProcessWithRectangle() {
+        let size = CGSize(width: 200, height: 200)
+        let rect = CGRect(x: 50, y: 25, width: 100, height: 150)
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let base = renderer.image { ctx in
+            UIColor.black.setFill()
+            ctx.fill(CGRect(origin: .zero, size: size))
+            UIColor.white.setFill()
+            ctx.fill(rect)
+        }
+
+        let oriented = UIImage(cgImage: base.cgImage!, scale: base.scale, orientation: .right)
+        let crop = CGRect(origin: .zero, size: size)
+
+        let out = CropEngine.process(image: oriented,
+                                     displaySize: size,
+                                     scale: 1,
+                                     offset: .zero,
+                                     cropRect: crop)
+
+        XCTAssertNotNil(out)
+        XCTAssertEqual(out?.imageOrientation, .up)
+        XCTAssertEqual(out?.size.width, rect.width, accuracy: 1)
+        XCTAssertEqual(out?.size.height, rect.height, accuracy: 1)
     }
 }
