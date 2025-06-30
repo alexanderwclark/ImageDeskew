@@ -3,6 +3,10 @@ Image correction app
 
 ## Building with Swift Package Manager
 
+> **Note**: This project relies on SwiftUI, PhotosUI, Vision and other Apple
+> frameworks. Building and running therefore requires **macOS** with Xcode.
+> Attempting a Linux build will fail because these frameworks are unavailable.
+
 1. Clone the repository and open the project directory:
    ```bash
    git clone <repo-url>
