@@ -332,8 +332,14 @@ struct ContentView: View {
 struct CropperView: View {
     let input: UIImage
     var onComplete: (UIImage) -> Void
-    @StateObject private var vm = CropperViewModel()
+    @StateObject private var vm: CropperViewModel
     @Environment(\.dismiss) private var dismiss
+
+    init(input: UIImage, onComplete: @escaping (UIImage) -> Void) {
+        self.input = input
+        self.onComplete = onComplete
+        _vm = StateObject(wrappedValue: CropperViewModel(imageSize: input.size))
+    }
 
     var body: some View {
         GeometryReader {
@@ -408,6 +414,13 @@ final class CropperViewModel: ObservableObject {
     @Published var offset: CGSize = .zero
     @Published var cropRect: CGRect = .zero
     @Published var isDraggingHandle: Bool = false
+
+    // Image dimensions
+    private let imageSize: CGSize
+
+    init(imageSize: CGSize = .zero) {
+        self.imageSize = imageSize
+    }
 
     // Gesture bases
     private var baseScale: CGFloat = 1
@@ -489,9 +502,9 @@ final class CropperViewModel: ObservableObject {
     
     
     private func imageFrame(in container: CGSize) -> CGRect {
-        let fit = fittedImageSize(for: CGSize(width: 1,
-                                              height: 1),
-                                  in: container) // aspect only
+        let base = imageSize == .zero ? CGSize(width: 1, height: 1) : imageSize
+        let fit = fittedImageSize(for: base,
+                                  in: container)
         let shown = CGSize(width: fit.width * scale,
                            height: fit.height * scale)
         return CGRect(x: ((container.width - shown.width) / 2) + offset.width,
@@ -569,8 +582,9 @@ final class CropperViewModel: ObservableObject {
     // Image size helper
     func displaySize(for image: UIImage? = nil,
                      in container: CGSize) -> CGSize {
-        fittedImageSize(for: image?.size ?? .init(width:1, height:1),
-                        in: container)
+        let base = image?.size ?? imageSize
+        return fittedImageSize(for: base == .zero ? CGSize(width:1, height:1) : base,
+                               in: container)
     }
 }
 
