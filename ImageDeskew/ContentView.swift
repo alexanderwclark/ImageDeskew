@@ -304,13 +304,9 @@ struct ContentView: View {
                     _ in loadImage()
                 }
 
-                if original != nil {
-                    NavigationLink("Crop / Deskew")
-                    {
-                        CropperView(input: original!)
-                        {
-                            corrected = $0
-                        }
+                if let orig = original {
+                    NavigationLink("Crop / Deskew") {
+                        CropperView(input: orig) { corrected = $0 }
                     }
                     .buttonStyle(.bordered)
                 }
