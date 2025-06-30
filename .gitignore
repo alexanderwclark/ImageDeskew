@@ -9,7 +9,8 @@ DerivedData/
 .build/
 
 # Xcode user data
-xcuserdata/
+**/xcuserdata/
+*.xcuserstate
 
 # Swift package manager dependencies
 Packages/
