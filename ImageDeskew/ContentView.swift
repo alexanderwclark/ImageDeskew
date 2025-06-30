@@ -74,6 +74,14 @@ struct CropSnapshot: Equatable {
     var cropRect: CGRect
 }
 
+/// Behavior when a crop rectangle extends outside the displayed image frame.
+enum OutOfBoundsBehavior {
+    /// Expand the image with transparent padding so the full crop rect is kept.
+    case pad
+    /// Adjust the crop origin so the full rect fits inside the image frame.
+    case clamp
+}
+
 
 
 // MARK: - Processing engine
@@ -128,7 +136,8 @@ struct CropEngine {
                         displaySize: CGSize,
                         scale: CGFloat,
                         offset: CGSize,
-                        cropRect: CGRect) -> UIImage? {
+                        cropRect: CGRect,
+                        outOfBounds: OutOfBoundsBehavior = .clamp) -> UIImage? {
         
         let upright = image.fixedOrientation()
         guard let cg = upright.cgImage else {
@@ -143,79 +152,60 @@ struct CropEngine {
             y: ((displaySize.height - shown.height)/2) + offset.height,
             width: shown.width,
             height: shown.height)
-            
-            // Ensure cropRect is within the displayed image frame
-            let cropRectClamped = cropRect.intersection(frame)
-            if cropRectClamped.isNull || cropRectClamped.width < 1 || cropRectClamped.height < 1
-            {
-#if DEBUG
-                print("cropRect not overlapping image frame!")
-#endif
-                return nil
-            }
 
-            // Map cropRectClamped (in display coords) to normalized
-            let nx = (cropRectClamped.minX - frame.minX) / frame.width
-            let ny = (cropRectClamped.minY - frame.minY) / frame.height
-            let nw = cropRectClamped.width / frame.width
-            let nh = cropRectClamped.height / frame.height
+        var adjusted = cropRect
+        let exceeds = !frame.contains(cropRect)
+        if exceeds && outOfBounds == .clamp {
+            if adjusted.minX < frame.minX { adjusted.origin.x = frame.minX }
+            if adjusted.minY < frame.minY { adjusted.origin.y = frame.minY }
+            if adjusted.maxX > frame.maxX { adjusted.origin.x = frame.maxX - adjusted.width }
+            if adjusted.maxY > frame.maxY { adjusted.origin.y = frame.maxY - adjusted.height }
+        }
 
-            // Clamp for safety
-            let nxClamped = max(0, min(nx, 1))
-            let nyClamped = max(0, min(ny, 1))
-            let nwClamped = max(0, min(nw, 1 - nxClamped))
-            let nhClamped = max(0, min(nh, 1 - nyClamped))
+        let displayCrop = outOfBounds == .pad ? cropRect : adjusted
 
-            #if DEBUG
-            print("nx: \(nxClamped), ny: \(nyClamped), nw: \(nwClamped), nh: \(nhClamped)")
-            #endif
+        // Map crop rectangle (in display coords) to normalized
+        let nx = (displayCrop.minX - frame.minX) / frame.width
+        let ny = (displayCrop.minY - frame.minY) / frame.height
+        let nw = displayCrop.width / frame.width
+        let nh = displayCrop.height / frame.height
 
-            guard nwClamped > 0, nhClamped > 0 else { return nil }
+        var pixFull = CGRect(
+            x: nx * CGFloat(cg.width),
+            y: ny * CGFloat(cg.height),
+            width: nw * CGFloat(cg.width),
+            height: nh * CGFloat(cg.height))
 
-        var pix = CGRect(
-            x: nxClamped * CGFloat(cg.width),
-            y: nyClamped * CGFloat(cg.height),
-            width: nwClamped * CGFloat(cg.width),
-            height: nhClamped * CGFloat(cg.height)
-        ).integral
+        let imageRect = CGRect(x: 0, y: 0, width: cg.width, height: cg.height)
+        let pixClamped = pixFull.intersection(imageRect)
+        guard !pixClamped.isNull else { return nil }
 
-
-        #if DEBUG
-        print("Cropping CGImage to rect: \(pix)")
-        print("Original size: \(cg.width)x\(cg.height)")
-        #endif
-
-            
-//            // 2. Crop -> pixel coords
-//        let nx = (cropRect.minX - frame.minX) / frame.width
-//        let ny = (cropRect.minY - frame.minY) / frame.height
-//        let nw = cropRect.width / frame.width
-//        let nh = cropRect.height / frame.height
-//            print("nx: \(nx), ny: \(ny), nw: \(nw), nh: \(nh)")
-//
-//            guard nx>=0,
-//                ny>=0,
-//                nx+nw<=1,
-//                ny+nh<=1
-//            else { return nil }
-//            
-//        let pix = CGRect(
-//            x: nx * CGFloat(cg.width),
-//            y: ny * CGFloat(cg.height),
-//            width: nw * CGFloat(cg.width),
-//            height: nh * CGFloat(cg.height)
-//        )
-//            print("Cropping CGImage to rect: \(pix), original size: \(cg.width)x\(cg.height)")
-
-        guard let cropped = cg.cropping(to: pix) else {
+        var cropped: CGImage
+        if let cgCrop = cg.cropping(to: pixClamped.integral) {
+            cropped = cgCrop
+        } else {
             return nil
         }
-#if DEBUG
-        let expectedCropWidth = Int(round(pix.width))
-        let expectedCropHeight = Int(round(pix.height))
+
+        if outOfBounds == .pad && pixFull != pixClamped {
+            let renderer = UIGraphicsImageRenderer(size: pixFull.size)
+            let offX = max(0, -pixFull.minX)
+            let offY = max(0, -pixFull.minY)
+            cropped = renderer.image { ctx in
+                ctx.cgContext.setFillColor(UIColor.clear.cgColor)
+                ctx.fill(CGRect(origin: .zero, size: pixFull.size))
+                ctx.cgContext.draw(cropped, in: CGRect(x: offX, y: offY, width: pixClamped.width, height: pixClamped.height))
+            }.cgImage!
+        }
+
+        #if DEBUG
+        print("Cropping CGImage to rect: \(pixFull)")
+        print("Original size: \(cg.width)x\(cg.height)")
+        let expectedCropWidth = Int(round(pixClamped.integral.width))
+        let expectedCropHeight = Int(round(pixClamped.integral.height))
         assert(cropped.width == expectedCropWidth && cropped.height == expectedCropHeight,
                "CGImage cropped size \(cropped.width)x\(cropped.height) != expected \(expectedCropWidth)x\(expectedCropHeight)")
-#endif
+        #endif
         
         // 3. Vision rect detect
         let handler = VNImageRequestHandler(cgImage: cropped)
@@ -242,7 +232,7 @@ struct CropEngine {
             print("cropRect (view): \(cropRect)")
             print("frame (image in view): \(frame)")
             print("Resulting normalized crop: x:\(nx), y:\(ny), w:\(nw), h:\(nh)")
-            print("Crop in image pixels: \(pix)")
+            print("Crop in image pixels: \(pixFull)")
             print("Original image size: \(cg.width)x\(cg.height)")
             #endif
             
@@ -469,12 +459,15 @@ final class CropperViewModel: ObservableObject {
     
     func clampRect(_ rect: CGRect,
                    to bounds: CGRect,
-                   minSize: CGFloat) -> CGRect {
+                   minSize: CGFloat,
+                   behavior: OutOfBoundsBehavior = .clamp) -> CGRect {
         var r = rect
 
         // Clamp size
         r.size.width = max(r.width, minSize)
         r.size.height = max(r.height, minSize)
+
+        guard behavior == .clamp else { return r }
 
         // Clamp position so rect stays within bounds
         if r.minX < bounds.minX { r.origin.x = bounds.minX }

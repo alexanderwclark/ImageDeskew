@@ -92,4 +92,55 @@ final class ImageDeskewTests: XCTestCase {
         XCTAssertEqual(out?.size.width, rect.width, accuracy: 1)
         XCTAssertEqual(out?.size.height, rect.height, accuracy: 1)
     }
+
+    func testClampRectPadAllowsOutside() {
+        let bounds = CGRect(x: 0, y: 0, width: 100, height: 100)
+        let rect = CGRect(x: -10, y: -10, width: 50, height: 50)
+        let vm = CropperViewModel()
+        let out = vm.clampRect(rect,
+                               to: bounds,
+                               minSize: 20,
+                               behavior: .pad)
+        XCTAssertEqual(out.origin.x, rect.origin.x, accuracy: 0.001)
+        XCTAssertEqual(out.origin.y, rect.origin.y, accuracy: 0.001)
+    }
+
+    func testProcessOutOfBoundsPadProducesPadding() {
+        let size = CGSize(width: 100, height: 100)
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let base = renderer.image { ctx in
+            UIColor.red.setFill()
+            ctx.fill(CGRect(origin: .zero, size: size))
+        }
+
+        let crop = CGRect(x: -10, y: -10, width: 60, height: 60)
+        let out = CropEngine.process(image: base,
+                                     displaySize: size,
+                                     scale: 1,
+                                     offset: .zero,
+                                     cropRect: crop,
+                                     outOfBounds: .pad)
+        XCTAssertNotNil(out)
+        XCTAssertEqual(out?.size, CGSize(width: 60, height: 60))
+    }
+
+    func testProcessOutOfBoundsClampShifts() {
+        let size = CGSize(width: 100, height: 100)
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let base = renderer.image { ctx in
+            UIColor.blue.setFill()
+            ctx.fill(CGRect(origin: .zero, size: size))
+        }
+
+        let crop = CGRect(x: -10, y: -10, width: 60, height: 60)
+        let out = CropEngine.process(image: base,
+                                     displaySize: size,
+                                     scale: 1,
+                                     offset: .zero,
+                                     cropRect: crop,
+                                     outOfBounds: .clamp)
+
+        XCTAssertNotNil(out)
+        XCTAssertEqual(out?.size, CGSize(width: 60, height: 60))
+    }
 }
