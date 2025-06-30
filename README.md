@@ -12,7 +12,11 @@ Image correction app
    ```bash
    swift build
    ```
-3. To run the app from the command line use:
+3. Run unit tests:
+   ```bash
+   swift test
+   ```
+4. To run the app from the command line use:
    ```bash
    swift run ImageDeskew
    ```
