@@ -179,11 +179,6 @@ struct CropEngine {
             height: nhClamped * CGFloat(cg.height)
         ).integral
 
-        // Sanity check - ensure rounding produced valid values
-        pix.origin.x = round(pix.origin.x)
-        pix.origin.y = round(pix.origin.y)
-        pix.size.width = round(pix.size.width)
-        pix.size.height = round(pix.size.height)
 
         #if DEBUG
         print("Cropping CGImage to rect: \(pix)")
