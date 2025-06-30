@@ -78,6 +78,9 @@ struct CropSnapshot: Equatable {
 
 // MARK: - Processing engine
 struct CropEngine {
+    /// Shared CIContext reused across calls. Thread‑safe for read‑only operations
+    static let ciContext = CIContext()
+
     static func resize(rect r0: CGRect,
                        handleIndex idx: Int,
                        translation t: CGSize,
@@ -248,7 +251,7 @@ struct CropEngine {
             
             // 4. Perspective correction
         let ci = CIImage(cgImage: cropped)
-        let ctx = CIContext()
+        let ctx = ciContext
         let outCG: CGImage
         if let o = o {
             let filt = CIFilter.perspectiveCorrection()

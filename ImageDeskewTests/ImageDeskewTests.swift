@@ -92,4 +92,22 @@ final class ImageDeskewTests: XCTestCase {
         XCTAssertEqual(out?.size.width, rect.width, accuracy: 1)
         XCTAssertEqual(out?.size.height, rect.height, accuracy: 1)
     }
+    func testProcessPerformance() {
+        let size = CGSize(width: 200, height: 200)
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let base = renderer.image { ctx in
+            UIColor.gray.setFill()
+            ctx.fill(CGRect(origin: .zero, size: size))
+        }
+        let oriented = UIImage(cgImage: base.cgImage!, scale: base.scale, orientation: .right)
+        let crop = CGRect(origin: .zero, size: size)
+        measure {
+            _ = CropEngine.process(image: oriented,
+                                   displaySize: size,
+                                   scale: 1,
+                                   offset: .zero,
+                                   cropRect: crop)
+        }
+    }
+
 }
