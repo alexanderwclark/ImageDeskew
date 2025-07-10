@@ -15,3 +15,18 @@ DerivedData/
 # Swift package manager dependencies
 Packages/
 
+Secrets.plist
+ImageDeskew/Secrets.plist
+
+
+ImageDeskew.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+ImageDeskew.xcodeproj/xcshareddata/xcschemes/ImageDeskew.xcscheme
+ImageDeskew.xcodeproj/xcshareddata/xcschemes/ImageDeskewTests.xcscheme
+ImageDeskew.xcodeproj/project.pbxproj
+ImageDeskew/DeepLabV3.mlmodel
+ImageDeskew/DeepLabV3.mlmodel
+ImageDeskew/Info.plist
+Podfile
+ImageDeskew/SecretsManager.swift
+ImageDeskew/CodexWrapper.swift
+ImageDeskew.xcodeproj/project.pbxproj
