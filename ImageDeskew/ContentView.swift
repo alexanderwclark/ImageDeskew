@@ -27,7 +27,6 @@ import CoreImage
 import CoreImage.CIFilterBuiltins
 
 
-
 // MARK: - Low‑level helpers
 extension UIImage {
     /// Returns a new image rendered upright so Core Graphics math is reliable.
@@ -35,9 +34,7 @@ extension UIImage {
         guard imageOrientation != .up else {
             return self
         }
-        UIGraphicsBeginImageContextWithOptions(size,
-                                               false,
-                                               scale)
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
         defer {
             UIGraphicsEndImageContext()
         }
@@ -88,10 +85,6 @@ enum OutOfBoundsBehavior {
 
 // MARK: - Processing engine
 struct CropEngine {
-   
-    /// Shared CIContext reused across calls. Thread‑safe for read‑only operations
-    static let ciContext = CIContext()
-    
     static func resize(rect r0: CGRect,
                        handleIndex idx: Int,
                        translation t: CGSize,
@@ -145,20 +138,12 @@ struct CropEngine {
                         cropRect: CGRect,
                         outOfBounds: OutOfBoundsBehavior = .clamp) -> UIImage? {
         
-        print("\n CropEngine.process called with: \n",
-              "displaySize=\(displaySize)\n",
-              "scale=\(scale)\n",
-              "offset=\(offset)\n",
-              "cropRect=\(cropRect)\n",
-              "image.size=\(image.size)\n")
-
         let upright = image.fixedOrientation()
         guard let cg = upright.cgImage else {
             return nil
             }
-        print("A: About to calculate frame")
         
-        // 1. Frame of displayed image in container coords
+            // 1. Frame of displayed image in container coords
         let fit = fittedImageSize(for: image.size, in: displaySize)
         let shown = CGSize(width: fit.width * scale, height: fit.height * scale)
         let frame = CGRect(
@@ -183,8 +168,6 @@ struct CropEngine {
         let ny = (displayCrop.minY - frame.minY) / frame.height
         let nw = displayCrop.width / frame.width
         let nh = displayCrop.height / frame.height
-        
-        print("B: About to clamp cropRect")
 
         var pixFull = CGRect(
             x: nx * CGFloat(cg.width),
@@ -195,22 +178,14 @@ struct CropEngine {
         let imageRect = CGRect(x: 0, y: 0, width: cg.width, height: cg.height)
         let pixClamped = pixFull.intersection(imageRect)
         guard !pixClamped.isNull else { return nil }
-        
-        if pixFull.width <= 0 || pixFull.height <= 0 ||
-           pixFull.minX < 0 || pixFull.minY < 0 ||
-           pixFull.maxX > CGFloat(cg.width) || pixFull.maxY > CGFloat(cg.height) {
-            print("FATAL: Invalid crop rect: \(pixFull), image size: \(cg.width)x\(cg.height)")
-            return nil
-        }
-        
+
         var cropped: CGImage
         if let cgCrop = cg.cropping(to: pixClamped.integral) {
             cropped = cgCrop
         } else {
             return nil
         }
-        print("C: About to calculate normalized coordinates")
-        
+
         if outOfBounds == .pad && pixFull != pixClamped {
             let renderer = UIGraphicsImageRenderer(size: pixFull.size)
             let offX = max(0, -pixFull.minX)
@@ -218,21 +193,8 @@ struct CropEngine {
             cropped = renderer.image { ctx in
                 ctx.cgContext.setFillColor(UIColor.clear.cgColor)
                 ctx.fill(CGRect(origin: .zero, size: pixFull.size))
-                ctx.cgContext.draw(cropped, in: CGRect(x: offX,
-                                                       y: offY,
-                                                       width: pixClamped.width,
-                                                       height: pixClamped.height))
-            }
-            .cgImage!
-        }
-        print("D: About to crop CGImage")
-        guard let cropped = cg.cropping(to: pixFull) else {
-            print("FATAL: Cropping failed for rect: \(pixFull)")
-            return nil
-        }
-        if cropped.width == 0 || cropped.height == 0 {
-            print("FATAL: Cropped image is zero size!")
-            return nil
+                ctx.cgContext.draw(cropped, in: CGRect(x: offX, y: offY, width: pixClamped.width, height: pixClamped.height))
+            }.cgImage!
         }
 
         #if DEBUG
@@ -243,7 +205,7 @@ struct CropEngine {
         assert(cropped.width == expectedCropWidth && cropped.height == expectedCropHeight,
                "CGImage cropped size \(cropped.width)x\(cropped.height) != expected \(expectedCropWidth)x\(expectedCropHeight)")
         #endif
-        print("E: About to run Vision")
+        
         // 3. Vision rect detect
         let handler = VNImageRequestHandler(cgImage: cropped)
         let req = VNDetectRectanglesRequest()
@@ -254,8 +216,7 @@ struct CropEngine {
             req.minimumConfidence = 0.5
         try? handler.perform([req])
         let o = (req.results as? [VNRectangleObservation])?.first
-         
-        if let o = o {
+            if let o = o {
                 #if DEBUG
                 print("\n Detected Vision corners (in pixels of crop):")
                 print("Top Left:     \(o.topLeft.denormalized(to: cropped))")
@@ -266,68 +227,25 @@ struct CropEngine {
             }
 
             #if DEBUG
-            print("\n Found rectangle? \(o != nil)\n",
-                  " corners: \n",
-                  "     \(o?.topLeft ?? .zero)\n",
-                  "     \(o?.topRight ?? .zero)\n",
-                  "     \(o?.bottomLeft ?? .zero)\n",
-                  "     \(o?.bottomRight ?? .zero)\n")
-        print("Rounded cropRect (view):  \n",
-              "     minX:\(cropRect.minX.rounded()),  minY:\(cropRect.minY.rounded()), \n",
-              "     maxX:\(cropRect.maxX.rounded()),  maxY:\(cropRect.maxY.rounded()), \n",
-              "         crop width: \(cropRect.width.rounded()),    crop height: \(cropRect.height.rounded())")
-        print("Rounded frame (image in view):  \n",
-              "     minX:\(frame.minX.rounded()),     minY:\(frame.minY.rounded()) \n",
-              "     maxX:\(frame.maxX.rounded()),     maxY:\(frame.maxY.rounded()), \n",
-              "         frame width: \(frame.width.rounded()),      frame height: \(frame.height.rounded()) \n")
-            print("Resulting normalized crop: \n",
-                  "     x:\(nx)\n",
-                  "     y:\(ny)\n",
-                  "     w:\(nw)\n",
-                  "     h:\(nh)\n")
-        print("Rounded Crop in image pixels:  \n",
-              "     minX:\(pixFull.minX.rounded()),  minY:\(pixFull.minY.rounded()), \n",
-              "     maxX:\(pixFull.maxX.rounded()),  maxY:\(pixFull.maxY.rounded()), \n",
-              "         crop widthPx: \(pixFull.width.rounded()),    crop heightPx: \(pixFull.height.rounded())")
+            print("\n Found rectangle? \(o != nil), corners: \(o?.topLeft ?? .zero), \(o?.topRight ?? .zero), \(o?.bottomLeft ?? .zero), \(o?.bottomRight ?? .zero)\n")
+            print("cropRect (view): \(cropRect)")
+            print("frame (image in view): \(frame)")
+            print("Resulting normalized crop: x:\(nx), y:\(ny), w:\(nw), h:\(nh)")
+            print("Crop in image pixels: \(pixFull)")
             print("Original image size: \(cg.width)x\(cg.height)")
             #endif
-        //testCoreMLModel()
-
-        
-        // 4. Perspective correction
+            
+            // 4. Perspective correction
         let ci = CIImage(cgImage: cropped)
-        let ctx = ciContext
+        let ctx = CIContext()
         let outCG: CGImage
-        
-        print("F: About to deskew")
         if let o = o {
             let filt = CIFilter.perspectiveCorrection()
                 filt.inputImage = ci  // ci is CIImage(cgImage: cropped)
-                filt.topLeft     = o.bottomLeft    .denormalized(to: cropped)
-                filt.topRight    = o.bottomRight   .denormalized(to: cropped)
-                filt.bottomLeft  = o.topLeft .denormalized(to: cropped)
-                filt.bottomRight = o.topRight.denormalized(to: cropped)
-            let tl = o.topLeft.denormalized(to: cropped)
-            let tr = o.topRight.denormalized(to: cropped)
-            let bl = o.bottomLeft.denormalized(to: cropped)
-            let br = o.bottomRight.denormalized(to: cropped)
-//            print("Rounded Vision rect:  \n",
-//                  "     tl.x:\(tl.x.rounded()),  minY:\(br.y.rounded()), \n",
-//                  "     tr.x:\(tr.x.rounded()),  maxY:\(cropRect.maxY.rounded()), \n",
-//                  "         crop width: \(cropRect.width.rounded()),    crop height: \(cropRect.height.rounded())")
-            // Find width/height of detected rectangle
-            let detectedWidth = max((tl.x - tr.x).magnitude,
-                                    (bl.x - br.x).magnitude)
-            let detectedHeight = max((tl.y - bl.y).magnitude,
-                                     (tr.y - br.y).magnitude)
-            let minSize = min(CGFloat(cropped.width),
-                              CGFloat(cropped.height)) * 0.4
-
-            if detectedWidth < minSize || detectedHeight < minSize {
-                print("\n detectedWidth: \(detectedWidth)")
-                print("detectedHeight: \(detectedHeight)")
-                print("Detected rectangle too small—skipping deskew \n")
-            }
+                filt.topLeft     = o.topLeft    .denormalized(to: cropped)
+                filt.topRight    = o.topRight   .denormalized(to: cropped)
+                filt.bottomLeft  = o.bottomLeft .denormalized(to: cropped)
+                filt.bottomRight = o.bottomRight.denormalized(to: cropped)
             if let out = filt.outputImage,
                 let result = ctx.createCGImage(out, from: out.extent)
             {
@@ -338,12 +256,7 @@ struct CropEngine {
         } else {
             outCG = cropped
         }
-        
-        if outCG.width == 0 || outCG.height == 0 {
-            print("FATAL: Attempting to create UIImage from zero-size CGImage!")
-            return nil
-        }
-        print("G: About to return UIImage")
+
         let resultImage = UIImage(cgImage: outCG,
                                    scale: image.scale,
                                    orientation: .up)
@@ -426,9 +339,7 @@ struct CropperView: View {
     @StateObject private var vm: CropperViewModel
     @Environment(\.dismiss) private var dismiss
 
-    init(input: UIImage,
-         onComplete: @escaping (UIImage) -> Void)
-    {
+    init(input: UIImage, onComplete: @escaping (UIImage) -> Void) {
         self.input = input
         self.onComplete = onComplete
         _vm = StateObject(wrappedValue: CropperViewModel(imageSize: input.size))
@@ -492,7 +403,7 @@ struct CropperView: View {
                 .padding()
             }
             .onAppear { vm.imageSize = input.size; vm.containerSize = geo.size }           
-            .onChange(of: geo.size) { s in vm.containerSize = s }
+            onChange(of: geo.size) { s in vm.containerSize = s }
         }
         .navigationBarTitleDisplayMode(.inline)
     }

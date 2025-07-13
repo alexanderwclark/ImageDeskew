@@ -7,106 +7,69 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-FE5BADEB2E1158A500984BB1 /* ImageDeskew.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageDeskew.app; sourceTree = BUILT_PRODUCTS_DIR; };
-FE5BAF012E1158A500984BB1 /* ImageDeskewTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImageDeskewTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE5BADEB2E1158A500984BB1 /* ImageDeskew.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageDeskew.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-FE5BADED2E1158A500984BB1 /* ImageDeskew */ = {
-isa = PBXFileSystemSynchronizedRootGroup;
-path = ImageDeskew;
-sourceTree = "<group>";
-};
-FE5BAF102E1158A500984BB1 /* ImageDeskewTests */ = {
-isa = PBXFileSystemSynchronizedRootGroup;
-path = ImageDeskewTests;
-sourceTree = "<group>";
-};
+		FE5BADED2E1158A500984BB1 /* ImageDeskew */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ImageDeskew;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-FE5BADE82E1158A500984BB1 /* Frameworks */ = {
-isa = PBXFrameworksBuildPhase;
-buildActionMask = 2147483647;
-files = (
-);
-runOnlyForDeploymentPostprocessing = 0;
-};
-FE5BAF122E1158A600984BB1 /* Frameworks */ = {
-isa = PBXFrameworksBuildPhase;
-buildActionMask = 2147483647;
-files = (
-);
-runOnlyForDeploymentPostprocessing = 0;
-};
+		FE5BADE82E1158A500984BB1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		FE5BADE22E1158A500984BB1 = {
 			isa = PBXGroup;
-children = (
-FE5BADED2E1158A500984BB1 /* ImageDeskew */,
-FE5BAF102E1158A500984BB1 /* ImageDeskewTests */,
-FE5BADEC2E1158A500984BB1 /* Products */,
-);
+			children = (
+				FE5BADED2E1158A500984BB1 /* ImageDeskew */,
+				FE5BADEC2E1158A500984BB1 /* Products */,
+			);
 			sourceTree = "<group>";
 		};
 		FE5BADEC2E1158A500984BB1 /* Products */ = {
 			isa = PBXGroup;
-children = (
-FE5BADEB2E1158A500984BB1 /* ImageDeskew.app */,
-FE5BAF012E1158A500984BB1 /* ImageDeskewTests.xctest */,
-);
+			children = (
+				FE5BADEB2E1158A500984BB1 /* ImageDeskew.app */,
+			);
 			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-FE5BADEA2E1158A500984BB1 /* ImageDeskew */ = {
-isa = PBXNativeTarget;
-buildConfigurationList = FE5BAE0E2E1158A600984BB1 /* Build configuration list for PBXNativeTarget "ImageDeskew" */;
-buildPhases = (
-FE5BADE72E1158A500984BB1 /* Sources */,
-FE5BADE82E1158A500984BB1 /* Frameworks */,
-FE5BADE92E1158A500984BB1 /* Resources */,
-);
-buildRules = (
-);
-dependencies = (
-);
-fileSystemSynchronizedGroups = (
-FE5BADED2E1158A500984BB1 /* ImageDeskew */,
-);
-name = ImageDeskew;
-packageProductDependencies = (
-);
-productName = ImageDeskew;
-productReference = FE5BADEB2E1158A500984BB1 /* ImageDeskew.app */;
-productType = "com.apple.product-type.application";
-};
-FE5BAF142E1158A600984BB1 /* ImageDeskewTests */ = {
-isa = PBXNativeTarget;
-buildConfigurationList = FE5BAF182E1158A600984BB1 /* Build configuration list for PBXNativeTarget "ImageDeskewTests" */;
-buildPhases = (
-FE5BAF112E1158A600984BB1 /* Sources */,
-FE5BAF122E1158A600984BB1 /* Frameworks */,
-FE5BAF132E1158A600984BB1 /* Resources */,
-);
-buildRules = (
-);
-dependencies = (
-);
-fileSystemSynchronizedGroups = (
-FE5BAF102E1158A500984BB1 /* ImageDeskewTests */,
-);
-name = ImageDeskewTests;
-packageProductDependencies = (
-);
-productName = ImageDeskewTests;
-productReference = FE5BAF012E1158A500984BB1 /* ImageDeskewTests.xctest */;
-productType = "com.apple.product-type.bundle.unit-test";
-};
+		FE5BADEA2E1158A500984BB1 /* ImageDeskew */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FE5BAE0E2E1158A600984BB1 /* Build configuration list for PBXNativeTarget "ImageDeskew" */;
+			buildPhases = (
+				FE5BADE72E1158A500984BB1 /* Sources */,
+				FE5BADE82E1158A500984BB1 /* Frameworks */,
+				FE5BADE92E1158A500984BB1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				FE5BADED2E1158A500984BB1 /* ImageDeskew */,
+			);
+			name = ImageDeskew;
+			packageProductDependencies = (
+			);
+			productName = ImageDeskew;
+			productReference = FE5BADEB2E1158A500984BB1 /* ImageDeskew.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -135,45 +98,30 @@ productType = "com.apple.product-type.bundle.unit-test";
 			productRefGroup = FE5BADEC2E1158A500984BB1 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
-targets = (
-FE5BADEA2E1158A500984BB1 /* ImageDeskew */,
-FE5BAF142E1158A600984BB1 /* ImageDeskewTests */,
-);
+			targets = (
+				FE5BADEA2E1158A500984BB1 /* ImageDeskew */,
+			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-FE5BADE92E1158A500984BB1 /* Resources */ = {
-isa = PBXResourcesBuildPhase;
-buildActionMask = 2147483647;
-files = (
-);
-runOnlyForDeploymentPostprocessing = 0;
-};
-FE5BAF132E1158A600984BB1 /* Resources */ = {
-isa = PBXResourcesBuildPhase;
-buildActionMask = 2147483647;
-files = (
-);
-runOnlyForDeploymentPostprocessing = 0;
-};
+		FE5BADE92E1158A500984BB1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-FE5BADE72E1158A500984BB1 /* Sources */ = {
-isa = PBXSourcesBuildPhase;
-buildActionMask = 2147483647;
-files = (
-);
-runOnlyForDeploymentPostprocessing = 0;
-};
-FE5BAF112E1158A600984BB1 /* Sources */ = {
-isa = PBXSourcesBuildPhase;
-buildActionMask = 2147483647;
-files = (
-);
-runOnlyForDeploymentPostprocessing = 0;
-};
+		FE5BADE72E1158A500984BB1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
@@ -292,6 +240,7 @@ runOnlyForDeploymentPostprocessing = 0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
@@ -313,6 +262,7 @@ runOnlyForDeploymentPostprocessing = 0;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -320,15 +270,19 @@ runOnlyForDeploymentPostprocessing = 0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = awc.ImageDeskew;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
-FE5BAE102E1158A600984BB1 /* Release */ = {
-isa = XCBuildConfiguration;
-buildSettings = {
+		FE5BAE102E1158A600984BB1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -341,6 +295,7 @@ buildSettings = {
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -348,44 +303,16 @@ buildSettings = {
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = awc.ImageDeskew;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
-name = Release;
-};
-FE5BAF162E1158A600984BB1 /* Debug */ = {
-isa = XCBuildConfiguration;
-buildSettings = {
-CODE_SIGN_STYLE = Automatic;
-INFOPLIST_FILE = "";
-PRODUCT_BUNDLE_IDENTIFIER = awc.ImageDeskewTests;
-PRODUCT_NAME = "$(TARGET_NAME)";
-SWIFT_VERSION = 5.0;
-SWIFT_EMIT_LOC_STRINGS = YES;
-LD_RUNPATH_SEARCH_PATHS = (
-"$(inherited)",
-"@executable_path/Frameworks",
-);
-};
-name = Debug;
-};
-FE5BAF172E1158A600984BB1 /* Release */ = {
-isa = XCBuildConfiguration;
-buildSettings = {
-CODE_SIGN_STYLE = Automatic;
-INFOPLIST_FILE = "";
-PRODUCT_BUNDLE_IDENTIFIER = awc.ImageDeskewTests;
-PRODUCT_NAME = "$(TARGET_NAME)";
-SWIFT_VERSION = 5.0;
-SWIFT_EMIT_LOC_STRINGS = YES;
-LD_RUNPATH_SEARCH_PATHS = (
-"$(inherited)",
-"@executable_path/Frameworks",
-);
-};
-name = Release;
-};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -398,24 +325,15 @@ name = Release;
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-FE5BAE0E2E1158A600984BB1 /* Build configuration list for PBXNativeTarget "ImageDeskew" */ = {
-isa = XCConfigurationList;
-buildConfigurations = (
-FE5BAE0F2E1158A600984BB1 /* Debug */,
-FE5BAE102E1158A600984BB1 /* Release */,
-);
-defaultConfigurationIsVisible = 0;
-defaultConfigurationName = Release;
-};
-FE5BAF182E1158A600984BB1 /* Build configuration list for PBXNativeTarget "ImageDeskewTests" */ = {
-isa = XCConfigurationList;
-buildConfigurations = (
-FE5BAF162E1158A600984BB1 /* Debug */,
-FE5BAF172E1158A600984BB1 /* Release */,
-);
-defaultConfigurationIsVisible = 0;
-defaultConfigurationName = Release;
-};
+		FE5BAE0E2E1158A600984BB1 /* Build configuration list for PBXNativeTarget "ImageDeskew" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FE5BAE0F2E1158A600984BB1 /* Debug */,
+				FE5BAE102E1158A600984BB1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 	};
 	rootObject = FE5BADE32E1158A500984BB1 /* Project object */;

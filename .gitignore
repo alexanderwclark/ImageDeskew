@@ -15,6 +15,7 @@ DerivedData/
 # Swift package manager dependencies
 Packages/
 
+<<<<<<< HEAD
 Secrets.plist
 ImageDeskew/Secrets.plist
 
@@ -31,3 +32,5 @@ ImageDeskew/SecretsManager.swift
 ImageDeskew/CodexWrapper.swift
 ImageDeskew.xcodeproj/project.pbxproj
 ImageDeskew.xcodeproj/project.pbxproj
+=======
+>>>>>>> parent of 8caca12 (CoreML Model tests)
